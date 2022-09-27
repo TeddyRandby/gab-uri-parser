@@ -1,0 +1,16 @@
+let parse = ..!require('uri-parser')
+
+def dump(parse_result) do
+
+  let path, query = ..parse_result
+
+  path and !print(..path)
+
+  query and !print('id: {query.id}')
+end
+
+("/proposal/summary/test"):parse():dump()
+
+("/proposal/summary?id=3"):parse():dump()
+ 
+("/"):parse():dump()
