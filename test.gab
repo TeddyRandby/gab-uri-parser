@@ -1,16 +1,13 @@
-let parse = ..!require('uri-parser')
+'uri-parser':require
 
-def dump(parse_result) do
+path, args = "/proposal/summary/test":to_uri
 
-  let path, query = ..parse_result
+{ path, args } :print
 
-  path and !print(..path)
+path, args = "/proposal/summary?id=3":to_uri
 
-  query and !print('id: {query.id}')
-end
-
-("/proposal/summary/test"):parse():dump()
-
-("/proposal/summary?id=3"):parse():dump()
+{ path, args } :print
  
-("/"):parse():dump()
+path, args = "/":to_uri
+
+{ path, args } :print
