@@ -1,0 +1,13 @@
+'uri-parser':require
+
+status, path, args = "/proposal/summary/test":to_uri
+
+{ path, args } :print
+
+status, path, args = "/proposal/summary?id=3":to_uri
+
+{ path, args } :print
+ 
+status, path, args = "/":to_uri
+
+{ path, args } :print

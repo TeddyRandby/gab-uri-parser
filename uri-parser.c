@@ -2,16 +2,14 @@
 #include <uriparser/Uri.h>
 
 void gab_lib_parse(gab_engine *gab, gab_vm *vm, u8 argc, gab_value argv[argc]) {
-  if (argc != 1 && GAB_VAL_IS_STRING(argv[0]))
+  if (argc != 1) {
+    gab_push(vm, GAB_STRING("INVALID_ARGUMENTS"));
     return;
+  }
 
   gab_obj_string *uri = GAB_VAL_TO_STRING(argv[0]);
 
-  s_i8 r_keys[2] = {
-      s_i8_cstr("path"),
-      s_i8_cstr("query"),
-  };
-  gab_value r_values[2] = {GAB_VAL_NIL(), GAB_VAL_NIL()};
+  gab_value r_values[] = {GAB_STRING("ok"), GAB_VAL_NIL(), GAB_VAL_NIL()};
 
   const char *errorPos = NULL;
   UriUriA parsed_uri;
@@ -39,12 +37,11 @@ void gab_lib_parse(gab_engine *gab, gab_vm *vm, u8 argc, gab_value argv[argc]) {
         values[index] = GAB_VAL_OBJ(gab_obj_string_create(
             gab, s_i8_create((i8 *)path->text.first,
                              path->text.afterLast - path->text.first)));
-
         path = path->next;
         index++;
       }
 
-      r_values[0] = gab_tuple(gab, vm, path_count, values);
+      r_values[1] = gab_tuple(gab, vm, path_count, values);
     }
   }
 
@@ -70,14 +67,14 @@ void gab_lib_parse(gab_engine *gab, gab_vm *vm, u8 argc, gab_value argv[argc]) {
       index++;
     }
 
-    r_values[1] = gab_record(gab, vm, item_count, keys, values);
+    r_values[2] = gab_record(gab, vm, item_count, keys, values);
 
     uriFreeQueryListA(query);
   };
 
   uriFreeUriMembersA(&parsed_uri);
 
-  gab_push(vm, LEN_CARRAY(r_values), r_values);
+  gab_vpush(vm, LEN_CARRAY(r_values), r_values);
 }
 
 gab_value gab_mod(gab_engine *gab, gab_vm *vm) {
