@@ -1,13 +1,13 @@
 'uri-parser':require
 
-status, path, args = "/proposal/summary/test":to_uri
+status, path, args = "/proposal/summary/test":to_uri ! match
+    .ok  => { path, args } :print end
+    else => status:panic          end
 
-{ path, args } :print
-
-status, path, args = "/proposal/summary?id=3":to_uri
-
-{ path, args } :print
+status, path, args = "/proposal/summary?id=3":to_uri ! match
+    .ok  => { path, args } :print end
+    else => status:panic          end
  
-status, path, args = "/":to_uri
-
-{ path, args } :print
+status, path, args = "/":to_uri ! match
+    .ok  => { path, args } :print end
+    else => status:panic          end
